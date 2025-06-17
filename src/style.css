@@ -15,69 +15,96 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    min-height: 100vh;
 }
 
 .App {
-    height: 50vh;
+    height: 60vh;
     width: 65vh;
-    background: rgb(0, 0, 0, .5);
+    max-width: 500px;
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* Header */
 .header {
     background: rgba(255, 255, 255, 0.2);
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
+    flex-shrink: 0;
 }
 
 .header h1 {
     font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 700;
 }
 
 input {
     width: 80%;
-    padding: 10px;
+    padding: 12px 15px;
     margin-top: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     outline: none;
     font-size: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.02);
 }
 
 button {
     background: #ff9800;
     color: white;
-    padding: 10px 20px;
-    margin-top: 10px;
+    padding: 12px 24px;
+    margin-top: 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
 }
 
 button:hover {
     background: #e68900;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
 }
 
-/* Weather Info */
+button:active {
+    transform: translateY(0);
+}
+
 .currentLocationWeather {
     background: rgba(255, 255, 255, 0.2);
     padding: 20px;
-    margin-top: 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 200px;
+    gap: 15px;
 }
 
 .currentLocationWeather h2 {
-    font-size: 25px;
-    margin-bottom: 10%;
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
 }
 
 .currentCondition {
@@ -85,50 +112,95 @@ button:hover {
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 .currentCondition img {
-    width: 60px;
-    height: 60px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
 }
 
 .currentLocationWeather p {
-    font-size: 20px;
-    margin-top: 5px;
+    font-size: 18px;
+    line-height: 1.4;
+    text-align: center;
+    margin: 0;
 }
 
-/* Responsive Design */
-@media (max-width: 500px) {
-    .App {
-        width: 100%;
-        padding: 15px;
-    }
-
-    input {
-        width: 100%;
-    }
-
-    button {
-        width: 100%;
-    }
-}
-
+/* Weather Condition Classes */
 .sunny {
+    transition: 1s;
     background: yellow;
-    box-shadow: 0 0 10px red;
 }
 
 .cloudy {
+    transition: 1s;
     background: rgb(152, 152, 152);
 }
 
 .rainy {
+    transition: 1s;
     background-color: rgb(0,0,255);
 }
 
 .snowy {
+    transition: 1s;
     background-color: red;
+}
+
+@media (max-width: 768px) {
+    .App {
+        width: 90vw;
+        height: 70vh;
+        padding: 15px;
+    }
+    
+    .header h1 {
+        font-size: 22px;
+    }
+    
+    input {
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    button {
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    .currentLocationWeather h2 {
+        font-size: 22px;
+    }
+    
+    .currentCondition {
+        font-size: 18px;
+    }
+    
+    .currentCondition img {
+        width: 56px;
+        height: 56px;
+    }
+}
+
+@media (max-width: 480px) {
+    .App {
+        width: 95vw;
+        height: 75vh;
+        padding: 12px;
+    }
+    
+    .header {
+        padding: 15px;
+    }
+    
+    .currentLocationWeather {
+        padding: 15px;
+        min-height: 180px;
+    }
 }
 

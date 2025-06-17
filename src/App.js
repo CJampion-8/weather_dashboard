@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useGetForecast from './Hooks/GetForecast.js';
+import useGetForecast from './components/GetForecast.js';
 import './style.css';
 
 function App() {
