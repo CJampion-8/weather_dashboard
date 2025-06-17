@@ -5,15 +5,18 @@ import './style.css';
 function App() {
     const { forecast, getForecast } = useGetForecast();
     const [city, setCity] = useState('');
-
     const [weatherClass, setWeatherClass] = useState('');
+    const [hasSearched, setHasSearched] = useState(false);
+
+    // Change this to test different weather conditions, null is real forecast.
+    const testWeatherCondition = null;
 
     useEffect(() => {
         if (forecast) {
             const body = document.body;
-            const condition = forecast.current.condition.text.toLowerCase();
+            // Use test condition if set, otherwise use real forecast data
+            const condition = testWeatherCondition || forecast.current.condition.text.toLowerCase();
 
-            // Remove all weather classes before adding the new one
             body.classList.remove("sunny", "cloudy", "rainy", "snowy");
 
             if (condition.includes("sunny")) {
@@ -26,7 +29,7 @@ function App() {
                 setWeatherClass("cloudy");
                 body.classList.add("cloudy");
             }
-            else if (condition.includes("rain")) {
+            else if (condition.includes("rain" || condition.includes("thundery"))) {
                 console.log('Changing to rainy decoration');
                 setWeatherClass("rainy");
                 body.classList.add("rainy");
@@ -37,34 +40,39 @@ function App() {
                 body.classList.add("snowy");
             }
             else {
-                body.classList.add("");
-                console.log('No matching weather condition found');
+                setWeatherClass("");
+                console.log(`${condition} is not a recognized weather condition.`);
             }
         }
     }, [forecast]);
     
-    
-    const handleSubmit = async (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
+        setHasSearched(true);
         await getForecast(city);
         console.log(forecast);
     };
 
     return (
+        <>
         <div className="App">
             <div className="header">
                 <h1>Weather Dashboard</h1>
-                <hr></hr>
                 <input 
                     type="text" 
                     placeholder="Search City or Zip Code" 
                     onChange={(e) => setCity(e.target.value)} 
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSubmit(e);
+                        }
+                    }}
                 />
                 <button type="submit" onClick={handleSubmit}>Search</button>
             </div>
-
-            <div className="currentLocationWeather">
-                {forecast ? (
+            
+            <div className={`currentLocationWeather ${hasSearched ? 'weather-visible' : 'weather-hidden'}`}>
+                {hasSearched && forecast ? (
                     <>
                         <h2>{forecast.location.name}, {forecast.location.region}</h2>
                         <div className="currentCondition">
@@ -77,11 +85,17 @@ function App() {
                         <p>{forecast.current.condition.text}</p>
                         <p>Humidity: {forecast.current.humidity}%</p>
                     </>
-                ) : (
-                    <p>Enter a city or zip code to get today's forecast.</p>
-                )}
+                ) : hasSearched && !forecast ? (
+                    <p>Loading weather data...</p>
+                ) : null}
             </div>
         </div>
+        
+        <a href="" target="_blank" rel="noopener noreferrer" className="portfolioRedirect">
+            Check out my other projects!
+        </a>
+        
+        </>
     );
 }
 

@@ -18,10 +18,15 @@ body {
     min-height: 100vh;
 }
 
+input {
+    text-align: center;
+}
+
 .App {
-    height: 60vh;
+    max-height: 90vh;
     width: 65vh;
     max-width: 500px;
+    min-width: 350px;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
     padding: 20px;
@@ -29,7 +34,7 @@ body {
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    transition: all 0.3s ease;
 }
 
 .header {
@@ -98,6 +103,25 @@ button:active {
     flex: 1;
     min-height: 200px;
     gap: 15px;
+    overflow: hidden;
+    transform-origin: top;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.weather-hidden {
+    max-height: 0;
+    opacity: 0;
+    transform: scaleY(0);
+    padding: 0 20px;
+    min-height: 0;
+    margin-top: 0;
+}
+
+.weather-visible {
+    max-height: 400px;
+    opacity: 1;
+    transform: scaleY(1);
+    margin-top: 20px;
 }
 
 .currentLocationWeather h2 {
@@ -132,25 +156,17 @@ button:active {
 }
 
 /* Weather Condition Classes */
-.sunny {
-    transition: 1s;
-    background: yellow;
-}
-
+.sunny,
+.rainy,
+.snowy,
 .cloudy {
-    transition: 1s;
-    background: rgb(152, 152, 152);
+    transition: all 1s ease;
 }
 
-.rainy {
-    transition: 1s;
-    background-color: rgb(0,0,255);
+.sunny .App {
+    box-shadow: 0px 0px 35px rgba(255, 255, 0, 0.783)
 }
 
-.snowy {
-    transition: 1s;
-    background-color: red;
-}
 
 @media (max-width: 768px) {
     .App {
@@ -204,3 +220,31 @@ button:active {
     }
 }
 
+.portfolioRedirect {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    font-weight: 300;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    font-size: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.portfolioRedirect:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
