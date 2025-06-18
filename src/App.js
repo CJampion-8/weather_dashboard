@@ -69,7 +69,7 @@ function App() {
                     }}
                 />
                 <button type="submit" onClick={handleSubmit}>Search</button>
-            </div>
+            </div> 
             
             <div className={`currentLocationWeather ${hasSearched ? 'weather-visible' : 'weather-hidden'}`}>
                 {hasSearched && forecast ? (
