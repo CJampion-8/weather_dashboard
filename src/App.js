@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import useGetForecast from './components/GetForecast.js';
+import useGetForecast from './components/getForecast.js';
+import useGeoLocation from './components/useGeoLocation.js';
 import './style.css';
 
 function App() {
-    const { forecast, getForecast } = useGetForecast();
+    const { forecast, getForecast, getForecastByCoordinates } = useGetForecast();
+    const { locationInfo, locationError } = useGeoLocation();
     const [city, setCity] = useState('');
     const [weatherClass, setWeatherClass] = useState('');
     const [hasSearched, setHasSearched] = useState(false);
@@ -11,46 +13,71 @@ function App() {
     // Change this to test different weather conditions, null is real forecast.
     const testWeatherCondition = null;
 
-    useEffect(() => {
-        if (forecast) {
-            const body = document.body;
-            // Use test condition if set, otherwise use real forecast data
-            const condition = testWeatherCondition || forecast.current.condition.text.toLowerCase();
+useEffect(() => {
+    if (forecast) {
+        const body = document.body;
+        const condition = testWeatherCondition || forecast.current.condition.text.toLowerCase();
 
-            body.classList.remove("sunny", "cloudy", "rainy", "snowy");
+        // Reset any existing weather class
+        body.classList.remove("sunny", "cloudy", "rainy", "snowy");
 
-            if (condition.includes("sunny")) {
-                console.log('Changing to sunny decoration');
-                setWeatherClass("sunny");
-                body.classList.add("sunny");
-            }
-            else if (condition.includes("cloud") || condition.includes("overcast")) {
-                console.log('Changing to cloudy decoration');
-                setWeatherClass("cloudy");
-                body.classList.add("cloudy");
-            }
-            else if (condition.includes("rain" || condition.includes("thundery"))) {
-                console.log('Changing to rainy decoration');
-                setWeatherClass("rainy");
-                body.classList.add("rainy");
-            }
-            else if (condition.includes("snow")) {
-                console.log('Changing to snowy decoration');
-                setWeatherClass("snowy");
-                body.classList.add("snowy");
-            }
-            else {
-                setWeatherClass("");
-                console.log(`${condition} is not a recognized weather condition.`);
-            }
+        if (condition.includes("sunny")) {
+            // console.log('Changing to sunny decoration');
+            setWeatherClass("sunny");
+            body.classList.add("sunny");
         }
-    }, [forecast]);
-    
-      const handleSubmit = async (e) => {
+        else if (condition.includes("cloud") || condition.includes("overcast")) {
+            // console.log('Changing to cloudy decoration');
+            setWeatherClass("cloudy");
+            body.classList.add("cloudy");
+        }
+        else if (condition.includes("rain") || condition.includes("thundery")) {
+            // console.log('Changing to rainy decoration');
+            setWeatherClass("rainy");
+            body.classList.add("rainy");
+        }
+        else if (condition.includes("snow")) {
+            // console.log('Changing to snowy decoration');
+            setWeatherClass("snowy");
+            body.classList.add("snowy");
+        }
+        else {
+            setWeatherClass("");
+            console.log(`${condition} is not a recognized weather condition.`);
+        }
+    }
+}, [forecast]);
+
+        const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!city.trim()) {
+            alert('Please enter a valid city or zip code.');
+            return;
+        }
         setHasSearched(true);
         await getForecast(city);
         console.log(forecast);
+    };
+
+    const handleCurrentLocation = async () => {
+        if (locationError) {
+            alert(`Location error: ${locationError}`);
+            return;
+        }
+
+        if (!locationInfo) {
+            alert('Location information not available. Please enable location services and refresh the page.');
+            return;
+        }
+
+        if (!locationInfo.latitude || !locationInfo.longitude) {
+            alert('Invalid location coordinates. Please try again.');
+            return;
+        }
+
+        setHasSearched(true);
+        await getForecastByCoordinates(locationInfo.latitude, locationInfo.longitude);
+        console.log('Weather fetched for current location:', forecast || locationInfo);
     };
 
     return (
@@ -66,10 +93,12 @@ function App() {
                         if (e.key === 'Enter') {
                             handleSubmit(e);
                         }
-                    }}
-                />
-                <button type="submit" onClick={handleSubmit}>Search</button>
-            </div> 
+                    }}/>
+                    <div className="button-container">
+                        <button type="submit" onClick={handleSubmit}>Search</button>
+                        <button type="button" onClick={handleCurrentLocation}>Use Current Location</button>
+                    </div>
+            </div>
             
             <div className={`currentLocationWeather ${hasSearched ? 'weather-visible' : 'weather-hidden'}`}>
                 {hasSearched && forecast ? (
@@ -81,13 +110,15 @@ function App() {
                                 alt={`Icon for ${forecast.current.condition.text}`} 
                             />
                             <>{forecast.current.temp_f}°F</>
-                        </div>
+                        </div>                        
                         <p>{forecast.current.condition.text}</p>
-                        <p>Humidity: {forecast.current.humidity}%</p>
+                        <p>
+                          <span style={{fontWeight: 'bold'}}>Humidity:</span> {forecast.current.humidity}%
+                        </p>
                     </>
                 ) : hasSearched && !forecast ? (
                     <p>Loading weather data...</p>
-                ) : null}
+                ) : null }
             </div>
         </div>
         

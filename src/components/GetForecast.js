@@ -1,34 +1,54 @@
 import { useState } from 'react';
-import useFetchWeather from './UseFetch'; 
+import useFetchWeather from './useFetch'; 
 
 function useGetForecast() {
     const [city, setCity] = useState(null);
     const [forecast, setForecast] = useState(null); 
-    const fetchForecastFromAPI = useFetchWeather(); 
+    const fetchForecastFromAPI = useFetchWeather();
 
-    const getForecast = async (city) => {
-        if (!city) {
-            alert('Please enter a city or zipcode.');
+    const getForecast = async (location) => {
+        if (!location) {
             return;
         }
 
-        setCity(city);
-        console.log('Fetching weather data for:', city);
+        setCity(location);
+        console.log('Fetching weather data for:', location);
 
         try {
-            const result = await fetchForecastFromAPI(city);
+            const result = await fetchForecastFromAPI(location);
             if (result) {
-                console.log(`Successfully fetched weather data for ${city}:`, result);
+                console.log(`Successfully fetched weather data for ${location}:`, result);
                 setForecast(result);
                 return result;
             }
         } catch (error) {
             console.error('Error fetching weather data:', error);
-            alert(`Unable to find weather data for ${city}. Please try again.`);
+            alert(`Unable to find weather data for ${location}. Please try again.`);
         }
     };
 
-    return { forecast, getForecast };
+    const getForecastByCoordinates = async (latitude, longitude) => {
+        if (!latitude || !longitude) {
+            alert('Invalid coordinates provided.');
+            return;
+        }
+
+        const coordinates = `${latitude},${longitude}`;
+        // console.log('Fetching weather data for coordinates:', coordinates);
+
+        try {
+            const result = await fetchForecastFromAPI(coordinates);
+            if (result) {
+                // console.log(`Successfully fetched weather data for coordinates ${coordinates}:`, result);
+                setForecast(result);
+                return result;
+            }
+        } catch (error) {
+            console.error('Error fetching weather data by coordinates:', error);
+            alert(`Unable to find weather data for your location. Please try entering a city name.`);        }
+    };
+
+    return { forecast, getForecast, getForecastByCoordinates };
 }
 
 export default useGetForecast;

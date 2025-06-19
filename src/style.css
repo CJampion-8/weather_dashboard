@@ -8,7 +8,7 @@
 }
 
 body {
-    background: linear-gradient(45deg, #1e3c72, #2a5298);
+    background: #1e3c72;
     color: white;
     text-align: center;
     display: flex;
@@ -16,6 +16,7 @@ body {
     align-items: center;
     height: 100vh;
     min-height: 100vh;
+    transition: background .3s ease;
 }
 
 input {
@@ -34,7 +35,7 @@ input {
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
+    transition: all .3s ease;
 }
 
 .header {
@@ -66,6 +67,12 @@ input {
 input:focus {
     background: rgba(255, 255, 255, 1);
     transform: scale(1.02);
+}
+
+.button-container{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
 button {
@@ -105,7 +112,7 @@ button:active {
     gap: 15px;
     overflow: hidden;
     transform-origin: top;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 .weather-hidden {
@@ -155,7 +162,7 @@ button:active {
     margin: 0;
 }
 
-/* Weather Condition Classes */
+/* Weather Conditions */
 .sunny,
 .rainy,
 .snowy,
@@ -163,8 +170,24 @@ button:active {
     transition: all 1s ease;
 }
 
+.sunny {
+    background: #f6be5c !important;
+}
+
 .sunny .App {
-    box-shadow: 0px 0px 35px rgba(255, 255, 0, 0.783)
+    box-shadow: 0px 0px 35px rgba(255, 255, 0, 0.783);
+}
+
+.rainy {
+    background: #4a5568 !important;
+}
+
+.cloudy {
+    background: #8e9aaf !important;
+}
+
+.snowy {
+    background: #e0e7ff !important;
 }
 
 
